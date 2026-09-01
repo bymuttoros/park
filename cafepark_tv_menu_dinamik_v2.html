@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cafe Park Dinamik TV Menü</title>
+<style>
+:root {
+  --bg:#061812; --panel:#0a241c; --gold:#e2b857; --cream:#fff4dc;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020b08}
+body{font-family:Segoe UI,Arial,sans-serif;color:var(--cream)}
+#app{
+  width:100vw;height:100vh;position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,255,180,.12), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(255,185,70,.14), transparent 30%),
+    linear-gradient(135deg,#04140f,#0a2a20 48%,#04140f);
+}
+#app:before{
+  content:"";position:absolute;inset:-30%;pointer-events:none;opacity:.24;
+  background:conic-gradient(from 0deg,transparent 0 20%,rgba(255,255,255,.07) 21%,transparent 23% 48%,rgba(226,184,87,.10) 49%,transparent 52% 100%);
+  animation:spin 22s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.topbar{
+  height:13vh;padding:1.2vh 2.2vw;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  border-bottom:1px solid rgba(226,184,87,.35);position:relative;z-index:5;
+}
+.brand{line-height:.88}
+.brand .cafe{font:italic 2.8vh Georgia;color:var(--gold)}
+.brand .park{font:900 5.6vh Georgia;letter-spacing:.12em;color:#fff6df}
+.brand .ig{font-size:1.35vh;color:#e8d8b8;margin-top:.35vh}
+.centerTitle{text-align:center}
+.centerTitle .now{font-size:1.6vh;color:#e7d2a9;letter-spacing:.14em}
+.centerTitle .hero{font-size:2.5vh;font-weight:900;letter-spacing:.08em}
+.clock{text-align:right}
+.clock .time{font-size:4.2vh;font-weight:900;color:#fff}
+.clock .date{font-size:1.35vh;color:#d7c7a5}
+
+.stage{height:82vh;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;padding:2vh 2vw 3.2vh}
+.slide{
+  position:absolute;inset:1.6vh 2vw 3.2vh;display:grid;grid-template-columns:31% 69%;gap:1.6vw;
+  opacity:0;transform:scale(.97) translateY(18px);transition:opacity .7s ease,transform .7s ease;
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:scale(1) translateY(0)}
+.visual{
+  border-radius:2.2vh;padding:2vh 1.4vw;position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 22px 78px rgba(0,0,0,.44);
+  display:flex;flex-direction:column;justify-content:space-between;
+  background-size:cover!important;background-position:center!important;
+}
+.visual:before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.28) 38%,rgba(0,0,0,.72) 100%);
+  z-index:0
+}
+.visual:after{
+  content:"";position:absolute;inset:auto -18% -35% auto;width:19vw;height:19vw;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.18),transparent 65%);
+  filter:blur(6px);z-index:0
+}
+.visual>*{position:relative;z-index:1}
+
+.icon{
+  font-size:7vh;filter:drop-shadow(0 10px 20px rgba(0,0,0,.35));
+  animation:float 3.8s ease-in-out infinite;
+  width:max-content;padding:.8vh .7vw;border-radius:1.2vh;
+  background:rgba(0,0,0,.28);backdrop-filter:blur(3px)
+}
+@keyframes float{50%{transform:translateY(-1.2vh) rotate(-2deg)}}
+.visual .kicker{font-size:1.5vh;letter-spacing:.18em;text-transform:uppercase;color:#eef7f1}
+.visual .title{font-size:4.8vh;line-height:.95;font-weight:1000;margin-top:.5vh;text-shadow:0 3px 16px rgba(0,0,0,.65)}
+.visual .subtitle{font-size:2.2vh;font-weight:900;margin-top:1vh;text-shadow:0 2px 10px rgba(0,0,0,.65)}
+.visual .priceSplash{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:10vw;padding:.8vh 1vw;border-radius:1.2vh;background:#fff;color:#102018;
+  font-size:3.4vh;font-weight:1000;box-shadow:0 10px 30px rgba(0,0,0,.25)
+}
+
+.menu{
+  background:linear-gradient(180deg,rgba(10,35,27,.96),rgba(5,23,18,.94));
+  border:1px solid rgba(226,184,87,.28);border-radius:2.2vh;padding:1.5vh 1.2vw;
+  box-shadow:0 20px 70px rgba(0,0,0,.32);overflow:hidden
+}
+.menu h1{margin:.1vh 0 1vh;font-size:3.3vh;color:var(--gold);letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65vh 1vw}
+.card{
+  min-height:6.15vh;border-radius:1.1vh;padding:.72vh .8vw;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.08);
+  display:grid;grid-template-columns:1fr auto;align-items:center;gap:.7vw;
+  animation:pop .55s both;
+}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.name{font-size:2.05vh;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
+.price{
+  font-size:2.7vh;font-weight:1000;padding:.38vh .7vw;border-radius:.85vh;
+  background:rgba(0,0,0,.30);min-width:5.8vw;text-align:center;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)
+}
+.bottom{
+  position:absolute;left:2vw;right:2vw;bottom:.55vh;height:2.6vh;display:flex;align-items:center;gap:.7vw;z-index:5
+}
+.progress{flex:1;height:.6vh;border-radius:99px;background:rgba(255,255,255,.10);overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffe08a,#e2b857);border-radius:99px}
+.dots{display:flex;gap:.28vw}
+.dot{width:.55vw;height:.55vw;border-radius:50%;background:rgba(255,255,255,.2);transition:.25s}
+.dot.active{background:#ffd46c;transform:scale(1.35)}
+.small{font-size:1.05vh;color:#c9baa0;white-space:nowrap}
+.flash{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.055),transparent);transform:translateX(-100%);animation:sweep 5.5s ease-in-out infinite}
+@keyframes sweep{55%,100%{transform:translateX(100%)}}
+
+@media (max-aspect-ratio: 16/10){
+  .name{font-size:1.85vh} .price{font-size:2.4vh} .menu h1{font-size:2.9vh}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="flash"></div>
+  <div class="topbar">
+    <div class="brand">
+      <div class="cafe">Cafe</div>
+      <div class="park">PARK</div>
+      <div class="ig">@cafeparkhassa</div>
+    </div>
+    <div class="centerTitle">
+      <div class="now">DİNAMİK TV MENÜ</div>
+      <div class="hero">KAHVE • LEZZET • SOHBET</div>
+    </div>
+    <div class="clock"><div class="time" id="clock">--:--</div><div class="date" id="date"></div></div>
+  </div>
+  <div class="stage" id="stage"></div>
+  <div class="bottom">
+    <div class="small">4 sn otomatik geçiş</div>
+    <div class="progress"><span id="bar"></span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+</div>
+<script>
+const slides = [{"title": "SICAK İÇECEKLER", "subtitle": "Klasikler", "accent": "#ffb347", "icon": "☕", "items": [["Çay (Fincan)", "10 ₺"], ["Fincan Çay", "15 ₺"], ["Sıcak Süt Fincan", "40 ₺"], ["Sıcak Çikolata Fincan", "50 ₺"], ["Salep", "60 ₺"], ["Ayran", "0 ₺"], ["Sıcak Süt", "60 ₺"]]}, {"title": "SICAK KAHVELER", "subtitle": "Kahve Keyfi", "accent": "#d7a84a", "icon": "☕", "items": [["Türk Kahvesi", "75 ₺"], ["Sütlü Türk Kahvesi", "60 ₺"], ["Dibek Kahvesi", "50 ₺"], ["Dibek Kahvesi Osmanlı", "60 ₺"], ["Menengiç Kahvesi", "50 ₺"], ["Damla Sakızlı Menengiç", "60 ₺"], ["Nescafe Gold", "40 ₺"], ["Nescafe Classic", "30 ₺"]]}, {"title": "ESPRESSO & KAHVELER", "subtitle": "Barista Seçkisi", "accent": "#8fd3f4", "icon": "🫘", "items": [["Sütlü Nescafe", "40 ₺"], ["Espresso", "70 ₺"], ["Double Espresso", "90 ₺"], ["Ristretto", "70 ₺"], ["Americano", "90 ₺"], ["Filtre Kahve", "0 ₺"], ["Latte", "120 ₺"], ["Cappuccino", "100 ₺"], ["Double Cappuccino", "120 ₺"], ["Latte Macchiato", "110 ₺"], ["Double Latte Macchiato", "130 ₺"], ["Flat White", "110 ₺"], ["Türk Kahvesi Süvari", "60 ₺"]]}, {"title": "SOĞUK KAHVELER", "subtitle": "Serin Kahveler", "accent": "#7dd3fc", "icon": "🧊", "items": [["Ice Americano", "150 ₺"], ["Ice Latte", "150 ₺"], ["Ice Mocha", "150 ₺"], ["Ice Caramel Latte", "160 ₺"], ["Ice White Chocolate", "150 ₺"], ["Frappe", "200 ₺"], ["Mocha", "150 ₺"]]}, {"title": "FROZEN ÇEŞİTLERİ", "subtitle": "Tüm Çeşitler 170 ₺", "accent": "#2dd4bf", "icon": "❄️", "items": [["Limon Frozen", "170 ₺"], ["Çilek Frozen", "170 ₺"], ["Mango Frozen", "170 ₺"], ["Karpuz Frozen", "170 ₺"], ["Orman Meyveli Frozen", "170 ₺"], ["Karadut", "170 ₺"], ["Yaban Mersini", "170 ₺"], ["Kivi", "170 ₺"], ["Yeşil Elma", "170 ₺"], ["Muz", "170 ₺"], ["Çarkıfelek", "170 ₺"], ["Çilek", "170 ₺"], ["Mango", "170 ₺"], ["Frambuaz", "170 ₺"], ["Ananas", "170 ₺"], ["Orman Meyveli", "170 ₺"]]}, {"title": "LİMONATA & BİTKİ ÇAYLARI", "subtitle": "Ferahlık ve Aroma", "accent": "#bef264", "icon": "🍋", "items": [["Klasik Limonata", "30 ₺"], ["Karpuz Çilek Limonata", "30 ₺"], ["Çilekli Limonata", "30 ₺"], ["Portakal Limonata", "30 ₺"], ["Nane Limon (Fincan)", "60 ₺"], ["Ihlamur (Fincan)", "60 ₺"], ["Ada Çayı (Fincan)", "60 ₺"], ["Kuşburnu (Fincan)", "60 ₺"], ["Yeşil Çay (Fincan)", "60 ₺"], ["Kış Çayı (Fincan)", "60 ₺"], ["Elma Tarçın Çayı (Fincan)", "60 ₺"], ["Elma Aromalı Karışık", "60 ₺"], ["Limon Portakal", "60 ₺"]]}, {"title": "MILKSHAKE", "subtitle": "Yoğun ve Serin", "accent": "#f9a8d4", "icon": "🥤", "items": [["Çikolatalı Milkshake", "180 ₺"], ["Çilekli Milkshake", "180 ₺"], ["Vanilyalı Milkshake", "180 ₺"], ["Oreo Milkshake", "180 ₺"], ["Karamelli Milkshake", "180 ₺"]]}, {"title": "SOĞUK İÇECEKLER", "subtitle": "Buz Gibi", "accent": "#67e8f9", "icon": "🥤", "items": [["Fuse Tea Şeftali", "60 ₺"], ["Fuse Tea Limon", "60 ₺"], ["Fuse Tea Mango", "60 ₺"], ["FuseTea", "70 ₺"], ["Uludağ Gazoz", "60 ₺"], ["Freşa Çeşitleri", "25 ₺"], ["Sprite", "0 ₺"], ["Gazoz", "0 ₺"], ["Vişne Suyu", "0 ₺"], ["Şeftali Suyu", "0 ₺"], ["Kayısı Suyu", "0 ₺"], ["Karışık Meyve Suyu", "0 ₺"], ["Taze Sıkma Portakal Suyu", "150 ₺"]]}, {"title": "SODA & SU", "subtitle": "Serinletici", "accent": "#93c5fd", "icon": "💧", "items": [["Su Küçük 0.5 lt", "10 ₺"], ["Su Büyük 1.5 lt", "20 ₺"], ["Sade Soda", "20 ₺"], ["Limonlu Soda", "20 ₺"], ["Elmalı Soda", "20 ₺"], ["Karışık Meyveli Soda", "20 ₺"]]}, {"title": "ATIŞTIRMALIK & TOST", "subtitle": "Hızlı Lezzet", "accent": "#fb923c", "icon": "🥪", "items": [["Popcorn", "40 ₺"], ["Buzlaş Çeşitleri", "40 ₺"], ["Kaşarlı Tost — Yarım", "80 ₺"], ["Kaşarlı Tost — Tam", "150 ₺"], ["Sucuklu Tost — Yarım", "90 ₺"], ["Sucuklu Tost — Tam", "170 ₺"], ["Karışık Tost — Yarım", "100 ₺"], ["Karışık Tost — Tam", "180 ₺"]]}, {"title": "ÖZEL İÇECEKLER", "subtitle": "Cafe Park Seçkisi", "accent": "#c4b5fd", "icon": "✨", "items": [["Churchill", "90 ₺"], ["Naneli Churchill", "0 ₺"], ["Cool Lime", "0 ₺"], ["Berry Hibiscus", "0 ₺"], ["Çilekli Cool Lime", "0 ₺"], ["Mango Cool Lime", "0 ₺"]]}];
+const INTERVAL = 4000;
+
+const PHOTO_MAP = {
+  "SICAK İÇECEKLER":"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=88",
+  "SICAK KAHVELER":"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=88",
+  "ESPRESSO & KAHVELER":"https://images.unsplash.com/photo-1512568400610-62da28bc8a13?auto=format&fit=crop&w=1200&q=88",
+  "SOĞUK KAHVELER":"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1200&q=88",
+  "FROZEN ÇEŞİTLERİ":"https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=1200&q=88",
+  "LİMONATA & BİTKİ ÇAYLARI":"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1200&q=88",
+  "MILKSHAKE":"https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=1200&q=88",
+  "SOĞUK İÇECEKLER":"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=1200&q=88",
+  "SODA & SU":"https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=1200&q=88",
+  "ATIŞTIRMALIK & TOST":"https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=1200&q=88",
+  "ÖZEL İÇECEKLER":"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1200&q=88"
+};
+
+let index = 0;
+let timer = null;
+const stage = document.getElementById('stage');
+const dots = document.getElementById('dots');
+const bar = document.getElementById('bar');
+
+function slideHTML(s, i){
+  const featured = s.items[0]?.[1] || "";
+  const cards = s.items.map((it,j)=>`
+    <div class="card" style="animation-delay:${Math.min(j*45,350)}ms">
+      <div class="name">${it[0]}</div>
+      <div class="price" style="color:${s.accent}">${it[1]}</div>
+    </div>`).join('');
+  return `
+  <section class="slide ${i===0?'active':''}" data-i="${i}">
+    <div class="visual" style="background-image:
+      linear-gradient(145deg,${s.accent}22,rgba(7,24,19,.18) 45%,rgba(4,18,14,.30)),
+      url('${PHOTO_MAP[s.title] || PHOTO_MAP["SICAK KAHVELER"]}')">
+      <div>
+        <div class="kicker">Cafe Park • Günün Menüsü</div>
+        <div class="title">${s.title}</div>
+        <div class="subtitle">${s.subtitle}</div>
+      </div>
+      <div class="icon">${s.icon}</div>
+      <div><span class="priceSplash">${featured}</span></div>
+    </div>
+    <div class="menu">
+      <h1>${s.title}</h1>
+      <div class="grid">${cards}</div>
+    </div>
+  </section>`;
+}
+
+stage.innerHTML = slides.map(slideHTML).join('');
+dots.innerHTML = slides.map((_,i)=>`<span class="dot ${i===0?'active':''}"></span>`).join('');
+
+function animateBar(){
+  bar.style.transition='none'; bar.style.width='0%';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    bar.style.transition=`width ${INTERVAL}ms linear`;
+    bar.style.width='100%';
+  }));
+}
+function show(n){
+  document.querySelectorAll('.slide').forEach((el,i)=>el.classList.toggle('active',i===n));
+  document.querySelectorAll('.dot').forEach((el,i)=>el.classList.toggle('active',i===n));
+  animateBar();
+}
+function next(){ index=(index+1)%slides.length; show(index); }
+function start(){ clearInterval(timer); show(index); timer=setInterval(next,INTERVAL); }
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'){index=(index+1)%slides.length;start()}
+  if(e.key==='ArrowLeft'){index=(index-1+slides.length)%slides.length;start()}
+  if(e.key.toLowerCase()==='f' && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+});
+document.addEventListener('click',()=>{
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+});
+
+function tick(){
+  const d=new Date();
+  document.getElementById('clock').textContent=d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('date').textContent=d.toLocaleDateString('tr-TR',{weekday:'long',day:'2-digit',month:'long'});
+}
+tick(); setInterval(tick,1000); start();
+</script>
+</body>
+</html>
