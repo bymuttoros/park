@@ -2,165 +2,184 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cafe Park Dinamik TV Menü</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050b09">
+<title>Cafe Park Hassa • TV</title>
 <style>
-:root{--gold:#d9aa3a;--cream:#fff4df;--green:#06271d}
+:root{
+  --gold:#d8ad54;
+  --ink:#06110d;
+  --glass:rgba(5,15,12,.78);
+}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020b08}
-body{font-family:Arial,Helvetica,sans-serif;color:var(--cream)}
-#app{width:100vw;height:100vh;position:relative;overflow:hidden;background:
-radial-gradient(circle at 18% 8%,rgba(24,120,82,.16),transparent 28%),
-linear-gradient(180deg,#03150f,#06241b 55%,#03120d)}
-header,.topbar{height:18vh;display:grid;grid-template-columns:29% 42% 29%;align-items:center;padding:1.7vh 3vw 1.1vh;border-bottom:1px solid rgba(217,170,58,.68);position:relative;z-index:4}
-.brand{border-right:1px solid rgba(217,170,58,.75);padding-right:2vw;line-height:1}
-.brand .cafe{font-family:Georgia,serif;font-style:italic;font-size:4vh;color:#e6b93d}
-.brand .park{font-family:Georgia,serif;font-size:7.3vh;letter-spacing:.13em;font-weight:700;color:#fff4df}
-.brand .ig{margin-top:.7vh;font-size:1.7vh;color:#f3c652;letter-spacing:.05em}
-.centerTitle{text-align:center}
-.centerTitle .now{font-size:1.8vh;letter-spacing:.25em;color:#e6b93d;font-weight:700}
-.centerTitle .hero{font-family:Georgia,serif;font-size:4.8vh;font-weight:800;letter-spacing:.04em;margin-top:.4vh}
-.clock{text-align:right;padding-left:2vw;border-left:1px solid rgba(217,170,58,.75)}
-.clock .time{font-size:6.6vh;font-weight:900;line-height:.95}
-.clock .date{font-size:1.9vh;color:#e8b842;font-weight:800;margin-top:.7vh;text-transform:uppercase}
-.stage{height:76vh;position:relative;z-index:3;padding:0}
-.slide{position:absolute;inset:1.8vh 1.2vw 1.2vh;display:grid;grid-template-columns:46% 54%;gap:.35vw;opacity:0;transform:scale(.985);transition:opacity .75s ease,transform .75s ease;pointer-events:none}
+html,body{
+  margin:0;width:100%;height:100%;
+  overflow:hidden;background:#000;
+  font-family:Arial,Helvetica,sans-serif;
+}
+body{user-select:none}
+#tv{position:relative;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  opacity:0;transform:scale(1.012);
+  transition:opacity 900ms ease,transform 6.8s linear;
+}
 .slide.active{opacity:1;transform:scale(1)}
-.visual{position:relative;overflow:hidden;border:1px solid rgba(217,170,58,.55);border-radius:1.6vh 0 0 1.6vh;background-size:cover!important;background-position:center!important;box-shadow:none;padding:0}
-.visual:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,16,11,.76) 0%,rgba(2,16,11,.28) 44%,rgba(2,16,11,.02) 75%),linear-gradient(180deg,transparent 45%,rgba(0,0,0,.36) 100%);z-index:0}
-.visual>*{position:relative;z-index:1}
-.visual>div:first-child{position:absolute;left:2.4vw;top:48%;transform:translateY(-50%);max-width:48%;text-shadow:0 4px 18px rgba(0,0,0,.72)}
-.visual .kicker{font-size:2.2vh;color:#b8dc75;font-weight:900;letter-spacing:.06em}
-.visual .title{font-size:5.1vh;line-height:.96;font-weight:1000;margin:.55vh 0;color:white}
-.visual .subtitle{font-size:2.1vh;color:#f2ce78;font-weight:800;letter-spacing:.05em}
-.visual>div:last-child{position:absolute;left:2.4vw;bottom:3.4vh}
-.visual .priceSplash{display:inline-flex;align-items:center;justify-content:center;min-width:8vw;padding:1vh 1vw;border-radius:1.2vh;background:#fff4df;color:#0a271c;border:3px solid #d9aa3a;font-size:3.2vh;font-weight:1000;box-shadow:0 14px 35px rgba(0,0,0,.28)}
-.menu{border:1px solid rgba(217,170,58,.65);border-left:none;border-radius:0 1.6vh 1.6vh 0;background:linear-gradient(180deg,rgba(4,39,28,.97),rgba(2,25,18,.98));padding:1.9vh 2vw 1.3vh;overflow:hidden;box-shadow:none}
-.menu h1{font-family:Georgia,serif;text-align:center;color:#e3b647;font-size:4vh;letter-spacing:.03em;margin:.1vh 0 1.2vh}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2.2vw;row-gap:.55vh}
-.card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.7vw;min-height:5.3vh;border:none;border-bottom:1px solid rgba(255,255,255,.055);border-radius:0;padding:.4vh 0;background:none;animation:rise .5s both}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.name{font-size:1.95vh;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.015em}
-.price{font-size:2.6vh;font-weight:1000;color:#f1be35!important;padding:.48vh .65vw;border:1px solid rgba(217,170,58,.52);border-radius:.65vh;min-width:5.2vw;text-align:center;background:rgba(0,0,0,.16)}
-.bottom{position:absolute;left:1.2vw;right:1.2vw;bottom:.5vh;height:5.2vh;border:1px solid rgba(217,170,58,.55);border-radius:1.1vh;display:grid;grid-template-columns:1fr 2fr 1fr;align-items:center;padding:0 1.5vw;z-index:5;background:rgba(3,28,20,.92)}
-.small{font-size:1.45vh;color:#e6b649;font-weight:900;letter-spacing:.08em}
-.progress{height:.5vh;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
-.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#f5d77a,#d8a62f)}
-.dots{display:flex;justify-content:flex-end;gap:.3vw}
-.dot{width:.5vw;height:.5vw;border-radius:50%;background:rgba(255,255,255,.2)}
-.dot.active{background:#ffd46c}
-.flash{display:none}
-@media(max-aspect-ratio:16/10){.name{font-size:1.7vh}.price{font-size:2.25vh}.menu h1{font-size:3.6vh}}
+.slide img{
+  width:100%;height:100%;display:block;
+  object-fit:cover;
+}
+.vignette{
+  pointer-events:none;position:absolute;inset:0;z-index:2;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.32) 0%,transparent 20%,transparent 76%,rgba(0,0,0,.38) 100%),
+    linear-gradient(90deg,rgba(0,0,0,.18),transparent 18%,transparent 82%,rgba(0,0,0,.18));
+}
+.logoBox{
+  position:absolute;z-index:5;top:2.2vh;left:2vw;
+  width:9.6vw;height:9.6vw;max-width:178px;max-height:178px;
+  min-width:96px;min-height:96px;border-radius:50%;
+  overflow:hidden;background:#fff;
+  border:2px solid rgba(216,173,84,.95);
+  box-shadow:0 12px 34px rgba(0,0,0,.38);
+}
+.logoBox img{width:100%;height:100%;object-fit:cover}
+.clockBox{
+  position:absolute;z-index:5;right:2vw;top:2.2vh;
+  min-width:17vw;padding:1.25vh 1.25vw 1.1vh;
+  color:white;text-align:center;
+  background:linear-gradient(180deg,rgba(4,18,14,.88),rgba(2,10,8,.78));
+  border:1px solid rgba(216,173,84,.8);
+  border-radius:1.3vh;
+  box-shadow:0 12px 34px rgba(0,0,0,.34);
+  backdrop-filter:blur(8px);
+}
+.time{font-size:5.8vh;line-height:1;font-weight:900;letter-spacing:.02em}
+.date{margin-top:.65vh;font-size:1.95vh;font-weight:800;color:#f2d18c}
+.day{margin-top:.28vh;font-size:1.65vh;font-weight:700;color:#fff}
+.brandStrip{
+  position:absolute;z-index:5;left:50%;bottom:1.7vh;transform:translateX(-50%);
+  display:flex;align-items:center;gap:1.1vw;
+  padding:.7vh 1.2vw;
+  border:1px solid rgba(216,173,84,.72);
+  border-radius:999px;
+  background:rgba(4,14,11,.72);
+  color:#fff;backdrop-filter:blur(7px);
+  font-weight:800;font-size:1.5vh;letter-spacing:.08em;
+  box-shadow:0 8px 26px rgba(0,0,0,.25);
+}
+.brandStrip b{color:#f2ca72}
+.progress{
+  position:absolute;z-index:6;left:0;right:0;bottom:0;height:.55vh;
+  background:rgba(255,255,255,.12);
+}
+.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#fff0b0,var(--gold))}
+.dots{
+  position:absolute;z-index:6;right:2vw;bottom:2.1vh;
+  display:flex;gap:.38vw;
+}
+.dot{width:.46vw;height:.46vw;min-width:7px;min-height:7px;border-radius:50%;background:rgba(255,255,255,.34)}
+.dot.active{background:#f4ce78;box-shadow:0 0 0 2px rgba(244,206,120,.16)}
+@media(max-aspect-ratio:4/3){
+  .clockBox{min-width:28vw}
+  .brandStrip{font-size:1.3vh}
+}
 </style>
-
 </head>
 <body>
-<div id="app">
-  <div class="flash"></div>
-  <div class="topbar">
-    <div class="brand">
-      <div class="cafe">Cafe</div>
-      <div class="park">PARK</div>
-      <div class="ig">@cafeparkhassa</div>
-    </div>
-    <div class="centerTitle">
-      <div class="now">ŞİMDİ KEŞFET</div>
-      <div class="hero">CAFE PARK MENÜ</div>
-    </div>
-    <div class="clock"><div class="time" id="clock">--:--</div><div class="date" id="date"></div></div>
+<div id="tv">
+  <div id="slides"></div>
+  <div class="vignette"></div>
+
+  <div class="logoBox"><img src="assets/logo.jpg" alt="Cafe Park Hassa"></div>
+
+  <div class="clockBox">
+    <div class="time" id="clock">--:--</div>
+    <div class="date" id="date">--</div>
+    <div class="day" id="day">--</div>
   </div>
-  <div class="stage" id="stage"></div>
-  <div class="bottom">
-    <div class="small">KAHVE • LEZZET • SOHBET</div>
-    <div class="progress"><span id="bar"></span></div>
-    <div class="dots" id="dots"></div>
-  </div>
+
+  <div class="brandStrip"><b>CAFE PARK HASSA</b><span>•</span><span>15 Kasım Parkı</span><span>•</span><span>@cafeparkhassa</span></div>
+
+  <div class="dots" id="dots"></div>
+  <div class="progress"><span id="bar"></span></div>
 </div>
+
 <script>
-const slides = [{"title": "SICAK İÇECEKLER", "subtitle": "Klasikler", "accent": "#ffb347", "icon": "☕", "items": [["Çay (Fincan)", "10 ₺"], ["Fincan Çay", "15 ₺"], ["Sıcak Süt Fincan", "40 ₺"], ["Sıcak Çikolata Fincan", "50 ₺"], ["Salep", "60 ₺"], ["Ayran", "0 ₺"], ["Sıcak Süt", "60 ₺"]]}, {"title": "SICAK KAHVELER", "subtitle": "Kahve Keyfi", "accent": "#d7a84a", "icon": "☕", "items": [["Türk Kahvesi", "75 ₺"], ["Sütlü Türk Kahvesi", "60 ₺"], ["Dibek Kahvesi", "50 ₺"], ["Dibek Kahvesi Osmanlı", "60 ₺"], ["Menengiç Kahvesi", "50 ₺"], ["Damla Sakızlı Menengiç", "60 ₺"], ["Nescafe Gold", "40 ₺"], ["Nescafe Classic", "30 ₺"]]}, {"title": "ESPRESSO & KAHVELER", "subtitle": "Barista Seçkisi", "accent": "#8fd3f4", "icon": "🫘", "items": [["Sütlü Nescafe", "40 ₺"], ["Espresso", "70 ₺"], ["Double Espresso", "90 ₺"], ["Ristretto", "70 ₺"], ["Americano", "90 ₺"], ["Filtre Kahve", "0 ₺"], ["Latte", "120 ₺"], ["Cappuccino", "100 ₺"], ["Double Cappuccino", "120 ₺"], ["Latte Macchiato", "110 ₺"], ["Double Latte Macchiato", "130 ₺"], ["Flat White", "110 ₺"], ["Türk Kahvesi Süvari", "60 ₺"]]}, {"title": "SOĞUK KAHVELER", "subtitle": "Serin Kahveler", "accent": "#7dd3fc", "icon": "🧊", "items": [["Ice Americano", "150 ₺"], ["Ice Latte", "150 ₺"], ["Ice Mocha", "150 ₺"], ["Ice Caramel Latte", "160 ₺"], ["Ice White Chocolate", "150 ₺"], ["Frappe", "200 ₺"], ["Mocha", "150 ₺"]]}, {"title": "FROZEN ÇEŞİTLERİ", "subtitle": "Tüm Çeşitler 170 ₺", "accent": "#2dd4bf", "icon": "❄️", "items": [["Limon Frozen", "170 ₺"], ["Çilek Frozen", "170 ₺"], ["Mango Frozen", "170 ₺"], ["Karpuz Frozen", "170 ₺"], ["Orman Meyveli Frozen", "170 ₺"], ["Karadut", "170 ₺"], ["Yaban Mersini", "170 ₺"], ["Kivi", "170 ₺"], ["Yeşil Elma", "170 ₺"], ["Muz", "170 ₺"], ["Çarkıfelek", "170 ₺"], ["Çilek", "170 ₺"], ["Mango", "170 ₺"], ["Frambuaz", "170 ₺"], ["Ananas", "170 ₺"], ["Orman Meyveli", "170 ₺"]]}, {"title": "LİMONATA & BİTKİ ÇAYLARI", "subtitle": "Ferahlık ve Aroma", "accent": "#bef264", "icon": "🍋", "items": [["Klasik Limonata", "30 ₺"], ["Karpuz Çilek Limonata", "30 ₺"], ["Çilekli Limonata", "30 ₺"], ["Portakal Limonata", "30 ₺"], ["Nane Limon (Fincan)", "60 ₺"], ["Ihlamur (Fincan)", "60 ₺"], ["Ada Çayı (Fincan)", "60 ₺"], ["Kuşburnu (Fincan)", "60 ₺"], ["Yeşil Çay (Fincan)", "60 ₺"], ["Kış Çayı (Fincan)", "60 ₺"], ["Elma Tarçın Çayı (Fincan)", "60 ₺"], ["Elma Aromalı Karışık", "60 ₺"], ["Limon Portakal", "60 ₺"]]}, {"title": "MILKSHAKE", "subtitle": "Yoğun ve Serin", "accent": "#f9a8d4", "icon": "🥤", "items": [["Çikolatalı Milkshake", "180 ₺"], ["Çilekli Milkshake", "180 ₺"], ["Vanilyalı Milkshake", "180 ₺"], ["Oreo Milkshake", "180 ₺"], ["Karamelli Milkshake", "180 ₺"]]}, {"title": "SOĞUK İÇECEKLER", "subtitle": "Buz Gibi", "accent": "#67e8f9", "icon": "🥤", "items": [["Fuse Tea Şeftali", "60 ₺"], ["Fuse Tea Limon", "60 ₺"], ["Fuse Tea Mango", "60 ₺"], ["FuseTea", "70 ₺"], ["Uludağ Gazoz", "60 ₺"], ["Freşa Çeşitleri", "25 ₺"], ["Sprite", "0 ₺"], ["Gazoz", "0 ₺"], ["Vişne Suyu", "0 ₺"], ["Şeftali Suyu", "0 ₺"], ["Kayısı Suyu", "0 ₺"], ["Karışık Meyve Suyu", "0 ₺"], ["Taze Sıkma Portakal Suyu", "150 ₺"]]}, {"title": "SODA & SU", "subtitle": "Serinletici", "accent": "#93c5fd", "icon": "💧", "items": [["Su Küçük 0.5 lt", "10 ₺"], ["Su Büyük 1.5 lt", "20 ₺"], ["Sade Soda", "20 ₺"], ["Limonlu Soda", "20 ₺"], ["Elmalı Soda", "20 ₺"], ["Karışık Meyveli Soda", "20 ₺"]]}, {"title": "ATIŞTIRMALIK & TOST", "subtitle": "Hızlı Lezzet", "accent": "#fb923c", "icon": "🥪", "items": [["Popcorn", "40 ₺"], ["Buzlaş Çeşitleri", "40 ₺"], ["Kaşarlı Tost — Yarım", "80 ₺"], ["Kaşarlı Tost — Tam", "150 ₺"], ["Sucuklu Tost — Yarım", "90 ₺"], ["Sucuklu Tost — Tam", "170 ₺"], ["Karışık Tost — Yarım", "100 ₺"], ["Karışık Tost — Tam", "180 ₺"]]}, {"title": "ÖZEL İÇECEKLER", "subtitle": "Cafe Park Seçkisi", "accent": "#c4b5fd", "icon": "✨", "items": [["Churchill", "90 ₺"], ["Naneli Churchill", "0 ₺"], ["Cool Lime", "0 ₺"], ["Berry Hibiscus", "0 ₺"], ["Çilekli Cool Lime", "0 ₺"], ["Mango Cool Lime", "0 ₺"]]}];
-const INTERVAL = 4000;
+const images = [
+  "assets/slide01.jpg",
+  "assets/slide02.jpg",
+  "assets/slide03.jpg",
+  "assets/slide04.jpg",
+  "assets/slide05.jpg",
+  "assets/slide06.jpg",
+  "assets/slide07.jpg",
+  "assets/slide08.jpg",
+  "assets/slide09.jpg"
+];
 
-const PHOTO_MAP = {
-  "SICAK İÇECEKLER":"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=88",
-  "SICAK KAHVELER":"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=88",
-  "ESPRESSO & KAHVELER":"https://images.unsplash.com/photo-1512568400610-62da28bc8a13?auto=format&fit=crop&w=1200&q=88",
-  "SOĞUK KAHVELER":"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1200&q=88",
-  "FROZEN ÇEŞİTLERİ":"https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=1200&q=88",
-  "LİMONATA & BİTKİ ÇAYLARI":"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1200&q=88",
-  "MILKSHAKE":"https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=1200&q=88",
-  "SOĞUK İÇECEKLER":"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=1200&q=88",
-  "SODA & SU":"https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=1200&q=88",
-  "ATIŞTIRMALIK & TOST":"https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=1200&q=88",
-  "ÖZEL İÇECEKLER":"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1200&q=88"
-};
-
+const INTERVAL = 7000;
 let index = 0;
-let timer = null;
-const stage = document.getElementById('stage');
-const dots = document.getElementById('dots');
-const bar = document.getElementById('bar');
+let timer;
 
-function slideHTML(s, i){
-  const featured = s.items[0]?.[1] || "";
-  const cards = s.items.map((it,j)=>`
-    <div class="card" style="animation-delay:${Math.min(j*45,350)}ms">
-      <div class="name">${it[0]}</div>
-      <div class="price" style="color:${s.accent}">${it[1]}</div>
-    </div>`).join('');
-  return `
-  <section class="slide ${i===0?'active':''}" data-i="${i}">
-    <div class="visual" style="background-image:
-      linear-gradient(90deg,rgba(2,16,11,.10),rgba(2,16,11,.02)),
-      url('${PHOTO_MAP[s.title] || PHOTO_MAP["SICAK KAHVELER"]}')">
-      <div>
-        <div class="kicker">Cafe Park • Günün Menüsü</div>
-        <div class="title">${s.title}</div>
-        <div class="subtitle">${s.subtitle}</div>
-      </div>
-      
-      <div><span class="priceSplash">${featured}</span></div>
-    </div>
-    <div class="menu">
-      <h1>${s.title}</h1>
-      <div class="grid">${cards}</div>
-    </div>
-  </section>`;
-}
+const slidesEl = document.getElementById("slides");
+const dotsEl = document.getElementById("dots");
+const bar = document.getElementById("bar");
 
-stage.innerHTML = slides.map(slideHTML).join('');
-dots.innerHTML = slides.map((_,i)=>`<span class="dot ${i===0?'active':''}"></span>`).join('');
+slidesEl.innerHTML = images.map((src,i)=>
+  `<div class="slide ${i===0?'active':''}"><img src="${src}" alt="Cafe Park tanıtım ${i+1}"></div>`
+).join("");
+
+dotsEl.innerHTML = images.map((_,i)=>`<span class="dot ${i===0?'active':''}"></span>`).join("");
 
 function animateBar(){
-  bar.style.transition='none'; bar.style.width='0%';
+  bar.style.transition="none";
+  bar.style.width="0";
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     bar.style.transition=`width ${INTERVAL}ms linear`;
-    bar.style.width='100%';
+    bar.style.width="100%";
   }));
 }
+
 function show(n){
-  document.querySelectorAll('.slide').forEach((el,i)=>el.classList.toggle('active',i===n));
-  document.querySelectorAll('.dot').forEach((el,i)=>el.classList.toggle('active',i===n));
+  document.querySelectorAll(".slide").forEach((el,i)=>el.classList.toggle("active",i===n));
+  document.querySelectorAll(".dot").forEach((el,i)=>el.classList.toggle("active",i===n));
   animateBar();
 }
-function next(){ index=(index+1)%slides.length; show(index); }
-function start(){ clearInterval(timer); show(index); timer=setInterval(next,INTERVAL); }
 
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'){index=(index+1)%slides.length;start()}
-  if(e.key==='ArrowLeft'){index=(index-1+slides.length)%slides.length;start()}
-  if(e.key.toLowerCase()==='f' && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
-});
-document.addEventListener('click',()=>{
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
-});
+function start(){
+  clearInterval(timer);
+  show(index);
+  timer=setInterval(()=>{
+    index=(index+1)%images.length;
+    show(index);
+  },INTERVAL);
+}
 
 function tick(){
   const d=new Date();
-  document.getElementById('clock').textContent=d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('date').textContent=d.toLocaleDateString('tr-TR',{weekday:'long',day:'2-digit',month:'long'});
+  document.getElementById("clock").textContent=d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
+  document.getElementById("date").textContent=d.toLocaleDateString("tr-TR",{day:"2-digit",month:"long",year:"numeric"});
+  document.getElementById("day").textContent=d.toLocaleDateString("tr-TR",{weekday:"long"});
 }
-tick(); setInterval(tick,1000); start();
+tick();
+setInterval(tick,1000);
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"){index=(index+1)%images.length;start()}
+  if(e.key==="ArrowLeft"){index=(index-1+images.length)%images.length;start()}
+  if(e.key.toLowerCase()==="f" && !document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(()=>{});
+  }
+});
+document.addEventListener("dblclick",()=>{
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+});
+
+start();
+
+// TV tarayıcısı uzun süre açık kalırsa sayfayı günde birkaç kez tazeler.
+setTimeout(()=>location.reload(), 6*60*60*1000);
 </script>
 </body>
 </html>
