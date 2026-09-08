@@ -1,0 +1,1 @@
+Tüm dosyaları park reposunun ana dizinine yükleyin. Yeni fotoğraf için örn. slide10.jpg yükleyip slides.js listesine ekleyin.
